@@ -1,0 +1,24 @@
+ARG DISTRO_NAME
+ARG DISTRO_VERSION
+FROM $DISTRO_NAME:$DISTRO_VERSION
+
+LABEL maintainer="javier@netmanagers.com.ar"
+
+ARG SALT_INSTALL_METHOD
+ARG SALT_VERSION
+ARG PYTHON_VERSION
+ARG EXTRA_PACKAGES=""
+ARG PKGS="dev-vcs/git app-admin/sudo $EXTRA_PACKAGES"
+
+RUN emerge-webrsync && \
+    echo "app-admin/sudo -sendmail" > /etc/portage/package.use/sudo && \
+    emerge -q ${PKGS} || true
+
+RUN curl -L https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh | \
+    sh -s -- -XUdfP -x python$PYTHON_VERSION $SALT_INSTALL_METHOD $SALT_VERSION
+
+RUN (systemctl enable sshd.service > /dev/null 2>&1 || rc-update add sshd default > /dev/null 2>&1 ) && \
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen
+
+RUN rm -rf /var/cache/salt /var/db/repos/gentoo /var/tmp/portage/* \
+    && (find / -name "*pyc" ; find / -name "__pycache__") | grep -v /proc | xargs rm -rf
