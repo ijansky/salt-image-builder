@@ -15,9 +15,9 @@ env:
     - TRAVIS_SECURE_ENV_VARS: true
 
   # VARS:
-  # DN:  distro name (amazonlinux, archlinux, centos, debian, fedora, opensuse, ubuntu)
+  # DN:  distro name (amazonlinux, archlinux, centos, debian, fedora, gentoo, opensuse, ubuntu)
   # DV:  distro version
-  # PI:  packages installer, used as dockerfile extension (apt, dnf, pac, yum, zyp)
+  # PI:  packages installer, used as dockerfile extension (apt, dnf, emerge, pac, yum, zyp)
   # SIM: salt install method (git, stable)
   # SV:  salt version (master, 3001, 3000.3, 2019.2)
   # PV:  python version (3, 2)
@@ -56,6 +56,16 @@ env:
     - DN=debian         DV=9      PI=apt SIM=stable SV=3001   PV=3 EP="python3-pip"
     - DN=debian         DV=9      PI=apt SIM=stable SV=3000.3 PV=3 EP="python3-pip"
     - DN=debian         DV=9      PI=apt SIM=stable SV=2019.2 PV=3 EP="python3-pip"
+
+    # Gentoo
+    - DN=gentoo/stage3 DV=latest  PI=emerge SIM=git    SV=master   PV=3 EP="dev-python/pip"
+    - DN=gentoo/stage3 DV=latest  PI=emerge SIM=stable SV=3001.1   PV=3 EP="dev-python/pip"
+    - DN=gentoo/stage3 DV=latest  PI=emerge SIM=stable SV=3000.3   PV=3 EP="dev-python/pip"
+    - DN=gentoo/stage3 DV=latest  PI=emerge SIM=stable SV=2019.2   PV=3 EP="dev-python/pip"
+    - DN=gentoo/stage3 DV=systemd PI=emerge SIM=git    SV=master   PV=3 EP="dev-python/pip"
+    - DN=gentoo/stage3 DV=systemd PI=emerge SIM=stable SV=3001.1   PV=3 EP="dev-python/pip"
+    - DN=gentoo/stage3 DV=systemd PI=emerge SIM=stable SV=3000.3   PV=3 EP="dev-python/pip"
+    - DN=gentoo/stage3 DV=systemd PI=emerge SIM=stable SV=2019.2   PV=3 EP="dev-python/pip"
 
     # FEDORA
     # Fedora has no python3 packages due to a tornado issue,
